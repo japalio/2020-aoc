@@ -10,6 +10,9 @@ import(
 )
 
 const file_name = "puzzle_input.txt"
+//GRRRR there's a bug
+// i'm off by 1
+// but not sure why yet
 
 func main() {
   f, err := os.Open(file_name)
