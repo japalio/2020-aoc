@@ -10,9 +10,6 @@ import(
 )
 
 const file_name = "puzzle_input.txt"
-//GRRRR there's a bug
-// i'm off by 1
-// but not sure why yet
 
 func main() {
   f, err := os.Open(file_name)
@@ -30,19 +27,10 @@ func main() {
     line := scanner.Text()
     if line == "" {
       if len(id) == 8 {
-
         if validate(id) == true {
           passesValidation += 1
         }
         numValid += 1
-      }
-      if len(id) == 7 {
-        if _, ok := id["cid"]; !ok {
-          if validate(id) == true {
-            passesValidation += 1
-          }
-          numValid += 1
-        }
       }
       id = make(map[string]string)
     } else {
@@ -51,17 +39,14 @@ func main() {
         splitAttr := strings.Split(attr, ":")
         id[splitAttr[0]] = splitAttr[1]
       }
+      // always set cid
+      id["cid"] = "fake"
     }
   }
 
   fmt.Println("numValid ", numValid)
   fmt.Println("passes validation ", passesValidation)
 }
-
-/*
-hi
-
-*/
 
 func validate(id map[string]string) bool {
 
@@ -85,6 +70,10 @@ func validate(id map[string]string) bool {
         }
       case "hgt":
         cm := strings.Split(v, "cm")
+        in := strings.Split(v, "in")
+        if len(cm) != 2 && len(in) != 2 {
+          return false
+        }
         if len(cm) == 2 {
           num , _ := strconv.Atoi(cm[0])
           if num < 150 || num > 193 {
@@ -92,7 +81,6 @@ func validate(id map[string]string) bool {
           }
         }
 
-        in := strings.Split(v, "in")
         if len(in) == 2 {
           num , _ := strconv.Atoi(in[0])
           if num < 59 || num > 76 {
@@ -104,9 +92,6 @@ func validate(id map[string]string) bool {
           return false
         }
         color := v[1:]
-        //if len(color) != 6 {
-        //  return false
-        //}
 	matched, _ := regexp.MatchString("[a-fA-F0-9]{6}", color)
 
         if !matched {
